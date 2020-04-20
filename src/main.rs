@@ -9,16 +9,9 @@
 // - compare input with word match from dict
 // - if wrong allow another input
 // - if right show correct and show next card
-// TODO INCLUDE LICENSE
-// FIX NON-NUMERIC ERROR MESSAGE for choice
-
-// only use this for clean terminal
-//#![allow(warnings)]
 extern crate csv;
 use csv::Reader;
 use std::{error::Error,path::Path,io};
-
-
 
 // holds possible language vocabs
 enum LanguageChoice {
@@ -52,7 +45,6 @@ impl LanguageChoice {
         Ok(())
     }
 }
-
 
 ///////////////////////////////////////////////////////////
 // processes input from player for choosing language
@@ -89,8 +81,6 @@ fn input_choice() -> u8 {
     };
     return return_val;
 }
-
-
 
 ////////////////////////////////////////////////////////////
 

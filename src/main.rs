@@ -2,8 +2,8 @@
 // flashcard program requirements:
 // - Simple terminal gui
 // * Vocabulary load Done! 
-// - - Improve CSVs
-// - - Figure out how to autogenerate menu options
+// - - Improve CSVs (once other stuff is sorted out)
+// - - Figure out how to autogenerate menu options? is this necessary?
 // - app shows random word from dictionary
 // - player has to input word (error check)
 // - compare input with word match from dict
@@ -38,6 +38,8 @@ impl LanguageChoice {
             // test record in case of error
             let record = record?;
             // prints csv out (for testing)
+
+            // should be placed into a vector or something
             println!("{} : {}\n",
             &record[0],
             &record[1]);
@@ -48,9 +50,12 @@ impl LanguageChoice {
 
 ///////////////////////////////////////////////////////////
 // processes input from player for choosing language
-fn input_choice() -> u8 {
+fn input_choice() -> LanguageChoice {
     let mut input = String::new();
-    let return_val: u8;
+
+    // informs player of available choices
+    println!("\nTo load English-German cards input 1.");
+    println!("To load English-Maltese cards input 2.\n");
 
     loop{
         // in case a number isn't entered, this is cleaned
@@ -67,42 +72,32 @@ fn input_choice() -> u8 {
         // splits off the new line \n
         input.split_off(input.len() -1);
 
-        // parses and returns choice
-        return_val = match input.parse() {
-            Ok(val) => val,
-            // if not a number, print error message
-            Err(_) => {
-                println!("Please enter a number.");
-                continue;
+        // match with enum to ensure validity and then return LanguageChoice type
+        match {
+            //parses input and returns if number
+            match input.parse() {
+                Ok(val) => val,
+                // if not a number, print error message
+                Err(_) => {
+                    println!("Please enter a number.");
+                    continue;
+                } 
             } 
-        };
-        // if ok stop loop and return return_val, if not keep asking
-        break;
-    };
-    return return_val;
-}
-
-////////////////////////////////////////////////////////////
-
-fn main() {
-    // informs player of available choices
-    println!("\nTo load English-German cards input 1.");
-    println!("To load English-Maltese cards input 2.\n");
-
-    let lang_choice: LanguageChoice;
-    // in loop until it reaches correct input, then loads csv
-    loop {
-        // player makes language choice. 
-        lang_choice = match input_choice() { 
-            1 => LanguageChoice::EngGer,
-            2 => LanguageChoice::EngMlt,
+        }   { 
+            // if number was provided check that it's a valid selection (we are matching the result of the match)
+            1 => return LanguageChoice::EngGer,
+            2 => return LanguageChoice::EngMlt,
             _ => {
                 println!("Invalid choice.");
                 continue;
             }
         };
-        break;
     };
-    // load the csv
-    lang_choice.load_csv().expect("Error");
+}
+
+////////////////////////////////////////////////////////////
+
+fn main() {
+    // displays choices, loads the csv and checks for error
+    input_choice().load_csv().expect("Error");
 }
